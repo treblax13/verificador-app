@@ -1,790 +1,651 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>VerifiCheck - Herramientas contra la Desinformación</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herramientas de Verificación de Información</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+        }
+        .section-title {
+            border-bottom: 2px solid #3b82f6; /* Blue-500 */
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        .tool-card, .case-study-card { /* Applied common styles */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column; /* Ensure footer link is at bottom */
+        }
+        .tool-card:hover, .case-study-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .details-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .details-content.open {
+            max-height: 1000px; /* Adjust as needed for content */
+        }
+        .case-study-card .card-content {
+            flex-grow: 1; /* Allows content to take up space, pushing link down */
+        }
+        /* Estilo para el botón "Volver Arriba" */
+        #backToTopBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 99;
+            display: none; /* Oculto por defecto */
+        }
+    </style>
 </head>
-<body>
-    <header>
-        <div class="header-content">
-            <h1>VerifiCheck <i class="fas fa-search-plus"></i></h1>
-            <p>Herramientas para combatir la desinformación en la era digital</p>
+<body class="bg-gray-100 text-gray-800">
+
+    <header class="bg-blue-600 text-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex flex-wrap justify-between items-center">
+            <h1 class="text-2xl font-bold">Verificación de Información</h1>
+            <nav>
+                <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+                <ul id="nav-menu" class="hidden md:flex space-x-4 md:space-x-6 items-center">
+                    <li><a href="#introduccion" class="hover:text-blue-200">Introducción</a></li>
+                    <li><a href="#motores-busqueda" class="hover:text-blue-200">Búsqueda Avanzada</a></li>
+                    <li><a href="#busqueda-inversa" class="hover:text-blue-200">Búsqueda Inversa</a></li>
+                    <li><a href="#analisis-audiovisual" class="hover:text-blue-200">Análisis A/V</a></li>
+                    <li><a href="#verificacion-dominios" class="hover:text-blue-200">Dominios/Webs</a></li>
+                    <li><a href="#fact-checking" class="hover:text-blue-200">Fact-Checking</a></li>
+                    <li><a href="#casos-estudio" class="hover:text-blue-200">Casos de Estudio</a></li>
+                    <li><a href="#materiales-apoyo" class="hover:text-blue-200">Materiales</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-blue-700">
+            <ul class="flex flex-col items-center py-4 space-y-2">
+                <li><a href="#introduccion" class="block py-2 px-4 hover:bg-blue-500 rounded-md">Introducción</a></li>
+                <li><a href="#motores-busqueda" class="block py-2 px-4 hover:bg-blue-500 rounded-md">Búsqueda Avanzada</a></li>
+                <li><a href="#busqueda-inversa" class="block py-2 px-4 hover:bg-blue-500 rounded-md">Búsqueda Inversa</a></li>
+                <li><a href="#analisis-audiovisual" class="block py-2 px-4 hover:bg-blue-500 rounded-md">Análisis A/V</a></li>
+                <li><a href="#verificacion-dominios" class="block py-2 px-4 hover:bg-blue-500 rounded-md">Dominios/Webs</a></li>
+                <li><a href="#fact-checking" class="block py-2 px-4 hover:bg-blue-500 rounded-md">Fact-Checking</a></li>
+                <li><a href="#casos-estudio" class="block py-2 px-4 hover:bg-blue-500 rounded-md">Casos de Estudio</a></li>
+                <li><a href="#materiales-apoyo" class="block py-2 px-4 hover:bg-blue-500 rounded-md">Materiales</a></li>
+            </ul>
         </div>
     </header>
 
-    <nav>
-        <div class="nav-container">
-            <div class="nav-item active" data-section="intro"><i class="fas fa-home"></i> Inicio</div>
-            <div class="nav-item" data-section="search-engines"><i class="fas fa-search"></i> Buscadores</div>
-            <div class="nav-item" data-section="image-search"><i class="fas fa-image"></i> Búsqueda de Imágenes</div>
-            <div class="nav-item" data-section="video-analysis"><i class="fas fa-video"></i> Análisis de Videos</div>
-            <div class="nav-item" data-section="domain-verify"><i class="fas fa-globe"></i> Verificación Web</div>
-            <div class="nav-item" data-section="fact-checking"><i class="fas fa-check-double"></i> Fact-Checking</div>
-            <div class="nav-item" data-section="resources"><i class="fas fa-book-open"></i> Materiales</div>
-        </div>
-    </nav>
+    <main class="container mx-auto px-4 py-8">
 
-    <main>
-        <!-- Sección Inicial -->
-        <section id="intro" class="section active">
-            <div class="intro-section">
-                <h2>¿Por qué verificar la información es crucial hoy?</h2>
-                <p>En la era digital, estamos constantemente bombardeados con información que puede ser verdadera, manipulada o completamente falsa. Desarrollar habilidades para verificar la información que consumimos es esencial para una ciudadanía crítica y responsable.</p>
-                <p>Esta plataforma te guiará por las herramientas y técnicas que los profesionales del fact-checking utilizan para distinguir lo verdadero de lo falso.</p>
-            </div>
-            <div class="intro-cards">
-                <div class="intro-card">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <h3>El problema</h3>
-                    <p>La desinformación está creciendo a ritmo alarmante y se propaga 6 veces más rápido que la información verificada.</p>
-                </div>
-                <div class="intro-card">
-                    <i class="fas fa-tools"></i>
-                    <h3>Las herramientas</h3>
-                    <p>Aprenderás a utilizar las mismas técnicas que usan los verificadores profesionales para combatir la desinformación.</p>
-                </div>
-                <div class="intro-card">
-                    <i class="fas fa-graduation-cap"></i>
-                    <h3>El objetivo</h3>
-                    <p>Desarrollar pensamiento crítico y habilidades para detectar información falsa o manipulada en cualquier medio.</p>
-                </div>
-            </div>
-            <div class="tip-box">
-                <h4><i class="fas fa-lightbulb"></i> Consejo para empezar</h4>
-                <p>Antes de compartir información, especialmente noticias impactantes o controvertidas, dedica unos minutos a verificarla usando las herramientas que aprenderás aquí.</p>
-            </div>
-            <div class="quiz-container">
-                <h3>¡Ponte a prueba!</h3>
-                <div class="quiz-question">
-                    <p>¿Cuál de estas afirmaciones es correcta sobre la verificación de información?</p>
-                    <div class="quiz-options">
-                        <div class="quiz-option" data-correct="false">Solo es necesario verificar información de fuentes desconocidas</div>
-                        <div class="quiz-option" data-correct="false">La verificación solo es útil para periodistas o investigadores</div>
-                        <div class="quiz-option" data-correct="true">Incluso fuentes respetadas pueden publicar información errónea ocasionalmente</div>
-                        <div class="quiz-option" data-correct="false">Si una información aparece en múltiples medios, ya no es necesario verificarla</div>
-                    </div>
-                    <div class="quiz-feedback"></div>
-                    <button class="quiz-button">Comprobar respuesta</button>
+        <section id="introduccion" class="mb-12 pt-16 -mt-16">
+            <h2 class="text-3xl font-semibold mb-6 section-title text-blue-700">Introducción a la Verificación</h2>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <p class="mb-4">En la era digital, la información fluye a una velocidad vertiginosa. Si bien esto democratiza el acceso al conocimiento, también facilita la propagación de desinformación y noticias falsas. Aprender a verificar la información es una habilidad crucial para la ciudadanía digital y la alfabetización mediática.</p>
+                <p class="mb-4">Esta aplicación te guiará a través de diversas herramientas y técnicas para analizar críticamente contenidos en línea, desde textos y sitios web hasta imágenes y videos. El objetivo es empoderarte para que puedas distinguir la información veraz de la engañosa y contribuir a un entorno digital más informado.</p>
+                <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4 rounded-md" role="alert">
+                    <p class="font-bold">Objetivo del Módulo:</p>
+                    <p>Enseñar de manera dinámica y visual el uso de herramientas de verificación de información, en el contexto de la lucha contra la desinformación, para maestrantes de Tecnologías Aplicadas a la Educación.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Sección Motores de búsqueda avanzada -->
-        <section id="search-engines" class="section">
-            <h2>Motores de búsqueda avanzada</h2>
-            <p>Los motores de búsqueda son la puerta de entrada a la información en internet. Aprender a utilizarlos de manera avanzada te permitirá encontrar información más precisa y relevante para tus verificaciones.</p>
-            <div class="tool-grid">
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <span>Google Búsqueda Avanzada</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="tool-content">
-                        <p>Google ofrece operadores de búsqueda que permiten filtrar resultados con gran precisión.</p>
-                        <div class="steps-container">
-                            <div class="step">
-                                <div class="step-number">1</div>
-                                <div class="step-content">
-                                    <h4>Operadores booleanos</h4>
-                                    <p>Usa comillas ("") para buscar frases exactas, OR para alternativas, y guiones (-) para excluir términos.</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">2</div>
-                                <div class="step-content">
-                                    <h4>Filtros de tiempo</h4>
-                                    <p>Usa la opción "Herramientas" para filtrar por fecha o período específico, muy útil para verificar cuándo apareció una información.</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">3</div>
-                                <div class="step-content">
-                                    <h4>Comandos especiales</h4>
-                                    <p>"site:" para buscar en un dominio específico, "filetype:" para tipos de archivo concretos.</p>
-                                </div>
-                            </div>
+        <section id="motores-busqueda" class="mb-12 pt-16 -mt-16">
+            <h2 class="text-3xl font-semibold mb-6 section-title text-blue-700">
+                <i class="fas fa-search-plus mr-2"></i>Motores de Búsqueda Avanzada
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="tool-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="card-content">
+                        <div class="flex items-center mb-3">
+                            <i class="fab fa-google text-3xl text-red-500 mr-3"></i>
+                            <h3 class="text-xl font-semibold text-gray-700">Google Búsqueda Avanzada</h3>
                         </div>
-                        <div class="interactive-demo">
-                            <h4>Prueba estos operadores</h4>
-                            <div class="demo-input">
-                                <input type="text" placeholder='Prueba: "cambio climático" site:edu -opinión' id="google-demo-input">
-                                <button id="google-demo-button">Buscar</button>
-                            </div>
-                            <div class="demo-result" id="google-demo-result">
-                                <p class="placeholder-text">Los resultados aparecerán aquí...</p>
-                            </div>
-                        </div>
-                        <div class="tool-buttons">
-                            <a href="https://www.google.com/advanced_search" target="_blank" class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i> Abrir Búsqueda Avanzada
-                            </a>
-                            <button class="btn btn-secondary toggle-example">
-                                <i class="fas fa-lightbulb"></i> Ver ejemplos
-                            </button>
-                        </div>
-                        <div class="example-container" style="display: none;">
-                            <div class="example-header">
-                                <h4>Ejemplos prácticos</h4>
-                            </div>
-                            <div class="tab-container">
-                                <div class="tab active" data-tab="example1">Caso 1</div>
-                                <div class="tab" data-tab="example2">Caso 2</div>
-                                <div class="tab" data-tab="example3">Caso 3</div>
-                            </div>
-                            <div class="tab-content active" id="example1">
-                                <p><strong>Escenario:</strong> Verificar una supuesta declaración de un político</p>
-                                <p><strong>Búsqueda efectiva:</strong> "nombre del político" "frase exacta" site:gob.mx OR site:diarios-confiables.com</p>
-                                <p><strong>Resultado:</strong> Limita los resultados a fuentes oficiales o medios reconocidos, mostrando solo aquellos que contengan la cita exacta.</p>
-                            </div>
-                            <div class="tab-content" id="example2">
-                                <p><strong>Escenario:</strong> Encontrar la fuente original de una estadística</p>
-                                <p><strong>Búsqueda efectiva:</strong> "45% de los estudiantes" filetype:pdf site:edu OR site:gob OR site:org</p>
-                                <p><strong>Resultado:</strong> Encuentra documentos PDF con el dato específico en sitios educativos, gubernamentales u organizaciones.</p>
-                            </div>
-                            <div class="tab-content" id="example3">
-                                <p><strong>Escenario:</strong> Verificar la antigüedad de una noticia viral</p>
-                                <p><strong>Búsqueda efectiva:</strong> "titular de la noticia" (usar filtro de fechas por "Personalizado" y seleccionar un rango amplio)</p>
-                                <p><strong>Resultado:</strong> Revela cuándo apareció realmente la información, útil para detectar noticias antiguas que se recirculan como actuales.</p>
-                            </div>
+                        <p class="text-sm text-gray-600 mb-3">Utiliza operadores y filtros para refinar tus búsquedas y encontrar información específica de manera eficiente.</p>
+                        <button class="toggle-details bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full mb-2">
+                            Aprender Más <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="details-content bg-gray-50 p-4 rounded-md border border-gray-200">
+                            <h4 class="font-semibold mb-2 text-gray-700">Cómo usar:</h4>
+                            <ul class="list-disc list-inside text-sm space-y-1 mb-3">
+                                <li><strong>Comillas (" "):</strong> Para buscar una frase exacta. Ej: <code>"cambio climático en México"</code></li>
+                                <li><strong>Operador AND:</strong> Para incluir múltiples términos (generalmente implícito). Ej: <code>educación AND tecnología</code></li>
+                                <li><strong>Operador OR:</strong> Para buscar alternativas. Ej: <code>universidad OR colegio</code></li>
+                                <li><strong>Signo menos (-):</strong> Para excluir términos. Ej: <code>jaguar -coche</code></li>
+                                <li><strong><code>site:</code></strong> Para buscar dentro de un sitio web específico. Ej: <code>inteligencia artificial site:unesco.org</code></li>
+                                <li><strong><code>filetype:</code></strong> Para buscar tipos de archivo específicos. Ej: <code>informe PISA filetype:pdf</code></li>
+                                <li><strong>Filtros de tiempo:</strong> Usa el menú "Herramientas" para filtrar por fecha (última hora, 24 horas, semana, año, rango personalizado).</li>
+                            </ul>
+                            <p class="text-sm"><strong>Ejemplo práctico:</strong> Investigar políticas educativas recientes sobre IA en universidades latinoamericanas. Podrías usar: <code>"políticas educativas" "inteligencia artificial" (universidad OR "educación superior") site:.edu OR site:.org (filetype:pdf OR filetype:html)</code> y luego filtrar por el último año.</p>
                         </div>
                     </div>
+                    <a href="https://www.google.com/advanced_search" target="_blank" class="mt-3 inline-block bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full text-center">
+                        Ir a Google Avanzado <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                    </a>
                 </div>
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <span>DuckDuckGo Búsqueda Privada</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="tool-content">
-                        <p>DuckDuckGo es un buscador que respeta la privacidad y ofrece comandos especializados para búsquedas precisas sin burbuja de filtros.</p>
-                        <div class="steps-container">
-                            <div class="step">
-                                <div class="step-number">1</div>
-                                <div class="step-content">
-                                    <h4>Bangs especiales</h4>
-                                    <p>Usa !bangs para buscar directamente en otros sitios (ej: !w para Wikipedia).</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">2</div>
-                                <div class="step-content">
-                                    <h4>Operadores especiales</h4>
-                                    <p>Usa "site:" para dominios específicos, "filetype:" para tipos de archivo, y "intitle:" para buscar en títulos.</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">3</div>
-                                <div class="step-content">
-                                    <h4>Evitar burbujas de filtro</h4>
-                                    <p>DuckDuckGo no personaliza resultados según tu historial, útil para obtener resultados más neutrales.</p>
-                                </div>
-                            </div>
+
+                <div class="tool-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="card-content">
+                        <div class="flex items-center mb-3">
+                            <img src="https://duckduckgo.com/assets/logo_header.alt.v108.svg" alt="DuckDuckGo Logo" class="h-8 mr-3">
+                            <h3 class="text-xl font-semibold text-gray-700">DuckDuckGo</h3>
                         </div>
-                        <div class="tip-box">
-                            <h4><i class="fas fa-lightbulb"></i> Consejo</h4>
-                            <p>Usa DuckDuckGo cuando quieras evitar resultados influenciados por tu historial de búsqueda, especialmente útil para contrastar información controversial.</p>
-                        </div>
-                        <div class="tool-buttons">
-                            <a href="https://duckduckgo.com/" target="_blank" class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i> Abrir DuckDuckGo
-                            </a>
-                            <a href="https://duck.co/help/results/syntax" target="_blank" class="btn btn-secondary">
-                                <i class="fas fa-book"></i> Guía de sintaxis
-                            </a>
+                        <p class="text-sm text-gray-600 mb-3">Un motor de búsqueda enfocado en la privacidad que también ofrece potentes comandos de búsqueda.</p>
+                         <button class="toggle-details bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full mb-2">
+                            Aprender Más <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="details-content bg-gray-50 p-4 rounded-md border border-gray-200">
+                            <h4 class="font-semibold mb-2 text-gray-700">Cómo usar:</h4>
+                            <ul class="list-disc list-inside text-sm space-y-1 mb-3">
+                                <li>Utiliza operadores booleanos similares a Google (<code>"frase exacta"</code>, <code>-excluir</code>, <code>site:</code>, <code>filetype:</code>).</li>
+                                <li><strong>!Bangs:</strong> Atajos para buscar directamente en otros sitios. Ej: <code>!w wikipedia</code> (busca "wikipedia" en Wikipedia), <code>!yt videos de gatos</code> (busca "videos de gatos" en YouTube).</li>
+                                <li>Filtros por fecha disponibles en la interfaz de resultados.</li>
+                            </ul>
+                            <p class="text-sm"><strong>Ejemplo práctico:</strong> Buscar rápidamente la definición de "alfabetización mediática" en Wikipedia usando <code>!w alfabetización mediática</code>.</p>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="quiz-container">
-                <h3>Pon a prueba tus conocimientos</h3>
-                <div class="quiz-question">
-                    <p>¿Qué operador de búsqueda deberías usar para encontrar información sobre clima, pero excluyendo cualquier mención a "pronóstico"?</p>
-                    <div class="quiz-options">
-                        <div class="quiz-option" data-correct="false">clima AND pronóstico</div>
-                        <div class="quiz-option" data-correct="true">clima -pronóstico</div>
-                        <div class="quiz-option" data-correct="false">"clima sin pronóstico"</div>
-                        <div class="quiz-option" data-correct="false">clima OR pronóstico</div>
-                    </div>
-                    <div class="quiz-feedback"></div>
-                    <button class="quiz-button">Comprobar respuesta</button>
+                    <a href="https://duckduckgo.com" target="_blank" class="mt-3 inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full text-center">
+                        Ir a DuckDuckGo <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- Sección Búsqueda inversa de imágenes -->
-        <section id="image-search" class="section">
-            <h2>Búsqueda inversa de imágenes</h2>
-            <p>Las imágenes frecuentemente se sacan de contexto o se manipulan para difundir desinformación. Aprende a verificar la procedencia y el contexto original de las imágenes con estas herramientas.</p>
-            <div class="tool-grid">
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <span>Google Images</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="tool-content">
-                        <p>Google Images permite buscar el origen de una imagen para verificar su autenticidad y contexto original.</p>
-                        <div class="steps-container">
-                            <div class="step">
-                                <div class="step-number">1</div>
-                                <div class="step-content">
-                                    <h4>Accede a la búsqueda inversa</h4>
-                                    <p>Ve a images.google.com y haz clic en el icono de la cámara en la barra de búsqueda.</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">2</div>
-                                <div class="step-content">
-                                    <h4>Sube la imagen o pega la URL</h4>
-                                    <p>Puedes subir una imagen desde tu dispositivo o pegar la URL de una imagen online.</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">3</div>
-                                <div class="step-content">
-                                    <h4>Analiza los resultados</h4>
-                                    <p>Revisa las coincidencias, prestando atención a la fecha más antigua de publicación y al contexto original.</p>
-                                </div>
-                            </div>
+        <section id="busqueda-inversa" class="mb-12 pt-16 -mt-16">
+            <h2 class="text-3xl font-semibold mb-6 section-title text-blue-700">
+                <i class="fas fa-image mr-2"></i>Búsqueda Inversa de Imágenes
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="tool-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="card-content">
+                        <div class="flex items-center mb-3">
+                            <i class="fab fa-google text-3xl text-blue-500 mr-3"></i>
+                            <h3 class="text-xl font-semibold text-gray-700">Google Images</h3>
                         </div>
-                        <div class="img-container">
-                            <img src="/api/placeholder/600/300" alt="Demostración de búsqueda inversa de imágenes en Google">
-                        </div>
-                        <div class="tip-box">
-                            <h4><i class="fas fa-lightbulb"></i> Consejo</h4>
-                            <p>Utiliza palabras clave adicionales junto con la búsqueda de imagen para refinar los resultados. Por ejemplo, si buscas una imagen de un supuesto desastre natural, añade el nombre del lugar o la fecha para obtener resultados más precisos.</p>
-                        </div>
-                        <div class="tool-buttons">
-                            <a href="https://images.google.com/" target="_blank" class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i> Abrir Google Images
-                            </a>
+                        <p class="text-sm text-gray-600 mb-3">Sube una imagen o pega una URL para encontrar su origen, imágenes similares y dónde más aparece en la web.</p>
+                        <button class="toggle-details bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full mb-2">
+                            Aprender Más <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="details-content bg-gray-50 p-4 rounded-md border border-gray-200">
+                            <h4 class="font-semibold mb-2 text-gray-700">Cómo usar:</h4>
+                            <ul class="list-disc list-inside text-sm space-y-1 mb-3">
+                                <li>Ve a <a href="https://images.google.com" target="_blank" class="text-blue-500 hover:underline">images.google.com</a> y haz clic en el icono de la cámara (<i class="fas fa-camera"></i>).</li>
+                                <li>Puedes pegar la URL de una imagen o subirla desde tu dispositivo.</li>
+                                <li>Analiza los resultados para ver si la imagen ha sido usada en otros contextos, fechas, o si existen versiones de mayor calidad o sin recortar.</li>
+                                <li>Es fundamental para detectar si una imagen se está utilizando fuera de su contexto original (ej. una foto antigua presentada como actual).</li>
+                            </ul>
+                            <p class="text-sm"><strong>Ejemplo práctico:</strong> Verificar si una foto de un evento noticioso es actual o si es una imagen antigua reutilizada. Si encuentras la misma imagen en artículos de años anteriores, o asociada a eventos distintos, es una señal de alerta.</p>
                         </div>
                     </div>
+                     <a href="https://images.google.com/" target="_blank" class="mt-3 inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full text-center">
+                        Ir a Google Images <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                    </a>
                 </div>
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <span>TinEye</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="tool-content">
-                        <p>TinEye es una herramienta especializada en búsqueda inversa de imágenes que ofrece filtros potentes para encontrar la primera aparición de una imagen.</p>
-                        <div class="steps-container">
-                            <div class="step">
-                                <div class="step-number">1</div>
-                                <div class="step-content">
-                                    <h4>Sube la imagen</h4>
-                                    <p>Visita tineye.com y sube la imagen o pega su URL.</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">2</div>
-                                <div class="step-content">
-                                    <h4>Utiliza los filtros</h4>
-                                    <p>TinEye permite ordenar resultados por "Más antiguo" para encontrar la primera aparición de una imagen.</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">3</div>
-                                <div class="step-content">
-                                    <h4>Compara tamaños</h4>
-                                    <p>Compara el tamaño de las imágenes encontradas; generalmente, las versiones de mayor resolución son más cercanas al original.</p>
-                                </div>
-                            </div>
+
+                <div class="tool-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="card-content">
+                         <div class="flex items-center mb-3">
+                            <img src="https://tineye.com/images/tineye_logo.svg" alt="TinEye Logo" class="h-7 mr-3">
+                            <h3 class="text-xl font-semibold text-gray-700">TinEye</h3>
                         </div>
-                        <div class="tool-buttons">
-                            <a href="https://tineye.com/" target="_blank" class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i> Abrir TinEye
-                            </a>
+                        <p class="text-sm text-gray-600 mb-3">Especializado en búsqueda inversa, a menudo encuentra el origen más antiguo de una imagen y cómo ha sido modificada.</p>
+                        <button class="toggle-details bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full mb-2">
+                            Aprender Más <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="details-content bg-gray-50 p-4 rounded-md border border-gray-200">
+                            <h4 class="font-semibold mb-2 text-gray-700">Cómo usar:</h4>
+                            <ul class="list-disc list-inside text-sm space-y-1 mb-3">
+                                <li>Sube una imagen o pega una URL en <a href="https://tineye.com" target="_blank" class="text-blue-500 hover:underline">TinEye.com</a>.</li>
+                                <li>Filtra los resultados por "Más antigua" (Oldest), "Más cambiada" (Most Changed), "Mejor coincidencia" (Best Match).</li>
+                                <li>Útil para rastrear la evolución y uso de una imagen a lo largo del tiempo, incluso si ha sido recortada o editada.</li>
+                            </ul>
+                            <p class="text-sm"><strong>Ejemplo práctico:</strong> Una imagen viral de una supuesta protesta. TinEye podría revelar que la foto original es de un evento completamente diferente y más antiguo, o que ha sido alterada digitalmente en comparación con versiones anteriores.</p>
                         </div>
                     </div>
+                    <a href="https://tineye.com/" target="_blank" class="mt-3 inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full text-center">
+                        Ir a TinEye <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                    </a>
                 </div>
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <span>Yandex Images</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="tool-content">
-                        <p>Yandex es especialmente potente para imágenes de Europa del Este y Asia, y a menudo encuentra coincidencias que otros buscadores pasan por alto.</p>
-                        <div class="steps-container">
-                            <div class="step">
-                                <div class="step-number">1</div>
-                                <div class="step-content">
-                                    <h4>Accede a Yandex Imágenes</h4>
-                                    <p>Ve a yandex.com/images y haz clic en el icono de la cámara.</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">2</div>
-                                <div class="step-content">
-                                    <h4>Tecnología de reconocimiento facial</h4>
-                                    <p>Yandex tiene capacidades avanzadas de reconocimiento facial y elementos visuales.</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">3</div>
-                                <div class="step-content">
-                                    <h4>Analiza imágenes similares</h4>
-                                    <p>Revisa las imágenes visualmente similares para encontrar variaciones o manipulaciones.</p>
-                                </div>
-                            </div>
+
+                <div class="tool-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="card-content">
+                        <div class="flex items-center mb-3">
+                             <svg class="h-8 w-8 mr-2 text-red-600" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12.123 4.06L8.06 11.877H16.18L12.123 4.06ZM8.06 12.877L4 20H8.06V12.877ZM16.18 12.877V20H20.24L16.18 12.877Z"/></svg>
+                            <h3 class="text-xl font-semibold text-gray-700">Yandex Images</h3>
                         </div>
-                        <div class="tip-box">
-                            <h4><i class="fas fa-lightbulb"></i> Consejo</h4>
-                            <p>Siempre utiliza múltiples buscadores de imágenes; cada uno tiene diferentes algoritmos y bases de datos. A veces Yandex encontrará coincidencias que Google o TinEye no detectaron.</p>
-                        </div>
-                        <div class="tool-buttons">
-                            <a href="https://yandex.com/images/" target="_blank" class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i> Abrir Yandex Images
-                            </a>
+                        <p class="text-sm text-gray-600 mb-3">Otro potente motor de búsqueda inversa, a veces ofrece resultados diferentes o más completos para ciertas regiones geográficas.</p>
+                        <button class="toggle-details bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full mb-2">
+                            Aprender Más <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="details-content bg-gray-50 p-4 rounded-md border border-gray-200">
+                            <h4 class="font-semibold mb-2 text-gray-700">Cómo usar:</h4>
+                            <ul class="list-disc list-inside text-sm space-y-1 mb-3">
+                                <li>Visita <a href="https://yandex.com/images/" target="_blank" class="text-blue-500 hover:underline">yandex.com/images</a> y haz clic en el icono de la cámara (<i class="fas fa-camera"></i>).</li>
+                                <li>Sube una imagen o proporciona una URL.</li>
+                                <li>Compara los resultados con los de Google Images y TinEye para una verificación más robusta, especialmente si sospechas un origen específico.</li>
+                            </ul>
+                            <p class="text-sm"><strong>Ejemplo práctico:</strong> Si una imagen parece provenir de Europa del Este o Asia Central, Yandex podría ofrecer mejores o diferentes resultados debido a su indexación regional y algoritmos.</p>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="example-container">
-                <div class="example-header">
-                    <h4>Caso práctico: Verificación de una imagen viral</h4>
-                </div>
-                <p>Una imagen que muestra supuestamente un desastre natural reciente ha sido compartida miles de veces en redes sociales.</p>
-                <div class="steps-container">
-                    <div class="step">
-                        <div class="step-number">1</div>
-                        <div class="step-content">
-                            <h4>Guardar la imagen</h4>
-                            <p>Guarda la imagen en tu dispositivo o copia su URL.</p>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">2</div>
-                        <div class="step-content">
-                            <h4>Realizar múltiples búsquedas</h4>
-                            <p>Sube la imagen a Google, TinEye y Yandex para comparar resultados.</p>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <h4>Verificar fecha y contexto</h4>
-                            <p>Al ordenar por fecha más antigua, descubres que la imagen es de un desastre que ocurrió hace 5 años en otro país.</p>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">4</div>
-                        <div class="step-content">
-                            <h4>Conclusión</h4>
-                            <p>La imagen es real pero está siendo compartida fuera de contexto, atribuyéndola a un evento actual.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="quiz-container">
-                <h3>Pon a prueba tus conocimientos</h3>
-                <div class="quiz-question">
-                    <p>Has encontrado una noticia con una imagen impactante. ¿Cuál es el primer paso para verificar su autenticidad?</p>
-                    <div class="quiz-options">
-                        <div class="quiz-option" data-correct="false">Compartirla con un experto para pedir su opinión</div>
-                        <div class="quiz-option" data-correct="true">Realizar una búsqueda inversa de la imagen en múltiples buscadores</div>
-                        <div class="quiz-option" data-correct="false">Verificar si la fuente que la publica es confiable</div>
-                        <div class="quiz-option" data-correct="false">Buscar artículos relacionados con el tema</div>
-                    </div>
-                    <div class="quiz-feedback"></div>
-                    <button class="quiz-button">Comprobar respuesta</button>
+                    <a href="https://yandex.com/images/" target="_blank" class="mt-3 inline-block bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full text-center">
+                        Ir a Yandex Images <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- Sección Análisis de video e imágenes -->
-        <section id="video-analysis" class="section">
-            <h2>Análisis de Video e Imágenes</h2>
-            <p>Los videos e imágenes son herramientas poderosas pero también pueden ser manipulados o sacados de contexto. Aprende a analizarlos con precisión usando técnicas manuales y herramientas especializadas.</p>
-            <div class="tool-grid">
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <span>InVID-WeVerify</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="tool-content">
-                        <p>Herramienta gratuita para verificar videos y extraer fotogramas clave para su análisis.</p>
-                        <div class="steps-container">
-                            <div class="step">
-                                <div class="step-number">1</div>
-                                <div class="step-content">
-                                    <h4>Carga el video</h4>
-                                    <p>Sube un video desde YouTube, Twitter u otras redes sociales.</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">2</div>
-                                <div class="step-content">
-                                    <h4>Extrae fotogramas</h4>
-                                    <p>Selecciona momentos específicos del video y exporta capturas de pantalla.</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">3</div>
-                                <div class="step-content">
-                                    <h4>Busca coincidencias</h4>
-                                    <p>Usa la imagen extraída en Google Images o TinEye para verificar si aparece en otros contextos.</p>
-                                </div>
-                            </div>
+        <section id="analisis-audiovisual" class="mb-12 pt-16 -mt-16">
+            <h2 class="text-3xl font-semibold mb-6 section-title text-blue-700">
+                <i class="fas fa-video mr-2"></i>Análisis de Video e Imágenes
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="tool-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="card-content">
+                        <div class="flex items-center mb-3">
+                            <i class="fas fa-cogs text-3xl text-purple-500 mr-3"></i>
+                            <h3 class="text-xl font-semibold text-gray-700">InVID-WeVerify Plugin</h3>
                         </div>
-                        <div class="tip-box">
-                            <h4><i class="fas fa-lightbulb"></i> Consejo</h4>
-                            <p>Utiliza la función de detección automática de duplicados para identificar si el video ha sido publicado anteriormente con otro mensaje.</p>
-                        </div>
-                        <div class="tool-buttons">
-                            <a href="https://www.invid-project.eu/" target="_blank" class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i> Abrir InVID-WeVerify
-                            </a>
+                        <p class="text-sm text-gray-600 mb-3">Una extensión de navegador ("navaja suiza") para análisis y verificación de videos e imágenes de redes sociales.</p>
+                        <button class="toggle-details bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full mb-2">
+                            Aprender Más <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="details-content bg-gray-50 p-4 rounded-md border border-gray-200">
+                            <h4 class="font-semibold mb-2 text-gray-700">Cómo usar:</h4>
+                            <ul class="list-disc list-inside text-sm space-y-1 mb-3">
+                                <li>Instala la extensión en Chrome o Firefox desde su sitio oficial.</li>
+                                <li>Abre un video (YouTube, Facebook, Twitter, etc.) o una imagen en tu navegador.</li>
+                                <li>Activa el plugin y utiliza sus funciones:
+                                    <ul>
+                                        <li><strong>Análisis de contexto/metadatos:</strong> Proporciona información básica sobre el video/imagen si está disponible.</li>
+                                        <li><strong>Fotogramas clave (Keyframes):</strong> Extrae imágenes clave del video. Luego puedes realizar búsquedas inversas de estos fotogramas individualmente usando Google, TinEye, Yandex, etc., directamente desde el plugin.</li>
+                                        <li><strong>Análisis forense de imágenes:</strong> Aplica diversos filtros para resaltar posibles manipulaciones (requiere interpretación cuidadosa y conocimiento).</li>
+                                        <li><strong>Búsqueda en miniaturas:</strong> Realiza búsqueda inversa de las diferentes miniaturas asociadas al video.</li>
+                                        <li><strong>Búsqueda avanzada en Twitter:</strong> Ayuda a rastrear el origen y la difusión de un video/imagen en Twitter.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <p class="text-sm"><strong>Ejemplo práctico:</strong> Un video viral muestra una escena impactante. Usa InVID para extraer fotogramas clave. Realiza búsquedas inversas de estos fotogramas. Si aparecen en contextos más antiguos, en otros idiomas o asociados a eventos diferentes, podría indicar que el video está sacado de contexto, es un montaje o es antiguo.</p>
                         </div>
                     </div>
+                     <a href="https://www.invid-project.eu/tools-and-services/invid-verification-plugin/" target="_blank" class="mt-3 inline-block bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full text-center">
+                        Obtener InVID-WeVerify <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                    </a>
                 </div>
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <span>Visualización manual</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="tool-content">
-                        <p>Para analizar videos manualmente, sigue estos pasos:</p>
-                        <div class="steps-container">
-                            <div class="step">
-                                <div class="step-number">1</div>
-                                <div class="step-content">
-                                    <h4>Reproduce el video</h4>
-                                    <p>Observa cuidadosamente el contenido, prestando atención al entorno, vestimenta, objetos visibles, etc.</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">2</div>
-                                <div class="step-content">
-                                    <h4>Captura fotogramas clave</h4>
-                                    <p>Usa herramientas como VLC o Captura de Pantalla para guardar momentos relevantes.</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">3</div>
-                                <div class="step-content">
-                                    <h4>Verifica contexto</h4>
-                                    <p>Busca en motores de búsqueda o redes sociales para encontrar coincidencias del lugar, fecha o evento.</p>
-                                </div>
-                            </div>
+
+                <div class="tool-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="card-content">
+                        <div class="flex items-center mb-3">
+                            <i class="fas fa-user-check text-3xl text-green-500 mr-3"></i>
+                            <h3 class="text-xl font-semibold text-gray-700">Técnicas Manuales de Análisis</h3>
                         </div>
-                        <div class="example-container">
-                            <div class="example-header">
-                                <h4>Ejemplo: Verificación de un video viral</h4>
-                            </div>
-                            <p>Un video muestra una protesta violenta supuestamente reciente en una ciudad conocida.</p>
-                            <div class="steps-container">
-                                <div class="step">
-                                    <div class="step-number">1</div>
-                                    <div class="step-content">
-                                        <h4>Capturar fotograma</h4>
-                                        <p>Identificar un cartel o edificio visible.</p>
-                                    </div>
-                                </div>
-                                <div class="step">
-                                    <div class="step-number">2</div>
-                                    <div class="step-content">
-                                        <h4>Búsqueda inversa</h4>
-                                        <p>Usar Google Images para buscar coincidencias del edificio o letrero.</p>
-                                    </div>
-                                </div>
-                                <div class="step">
-                                    <div class="step-number">3</div>
-                                    <div class="step-content">
-                                        <h4>Conclusión</h4>
-                                        <p>El edificio corresponde a un evento de hace tres años en otro país; el video está descontextualizado.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tool-buttons">
-                            <button class="btn btn-secondary toggle-example">
-                                <i class="fas fa-lightbulb"></i> Ver ejemplo
-                            </button>
+                        <p class="text-sm text-gray-600 mb-3">Observación crítica y análisis detallado de elementos visuales en imágenes y videos, complementario a las herramientas.</p>
+                        <button class="toggle-details bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full mb-2">
+                            Aprender Más <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="details-content bg-gray-50 p-4 rounded-md border border-gray-200">
+                            <h4 class="font-semibold mb-2 text-gray-700">Qué observar (además de usar herramientas):</h4>
+                            <ul class="list-disc list-inside text-sm space-y-1 mb-3">
+                                <li><strong>Fuente original:</strong> Intenta siempre llegar a la fuente primaria del contenido. ¿Quién lo publicó primero? ¿Es una fuente confiable?</li>
+                                <li><strong>Consistencia interna:</strong> ¿Los elementos dentro de la imagen/video son coherentes entre sí? (Ej. reflejos, sombras, proporciones).</li>
+                                <li><strong>Logos y texto:</strong> ¿Son legibles y nítidos? ¿Corresponden a organizaciones reales? ¿El idioma y la tipografía son consistentes con la supuesta ubicación/origen?</li>
+                                <li><strong>Sombras y luces:</strong> ¿Las fuentes de luz y las sombras que proyectan los objetos son lógicas y consistentes? Múltiples fuentes de luz o sombras incorrectas pueden indicar manipulación.</li>
+                                <li><strong>Detalles del entorno:</strong> Matrículas de autos (¿corresponden al país/región?), señales de tráfico, tipo de vegetación, arquitectura, vestimenta de las personas. ¿Coinciden con la ubicación y fecha alegadas?</li>
+                                <li><strong>Calidad de imagen/video:</strong> Una calidad inusualmente baja, pixelada o borrosa en ciertas áreas puede ser un intento de ocultar manipulación o ser simplemente una copia de mala calidad.</li>
+                                <li><strong>Sonido (en videos):</strong> ¿El audio es natural? ¿Hay sincronización labial? ¿Los sonidos ambientales coinciden con la escena?</li>
+                                <li><strong>Reacciones y comentarios:</strong> Si está en redes sociales, ¿qué dicen otros usuarios? ¿Alguien más ha señalado inconsistencias? (Tomar con cautela, pero puede dar pistas).</li>
+                            </ul>
+                            <p class="text-sm"><strong>Ejemplo práctico:</strong> Una imagen de una manifestación. Analiza las pancartas (idioma, mensajes, calidad de impresión). Observa la ropa de las personas (¿adecuada para el clima/cultura del lugar y fecha supuestos?). Busca detalles en los edificios del fondo. Intenta geolocalizar la imagen usando estos detalles (buscando en Google Maps/Street View si se alega una ubicación específica) para confirmar si el entorno coincide.</p>
                         </div>
                     </div>
-                </div>
+                    </div>
             </div>
-            <div class="quiz-container">
-                <h3>Pon a prueba tus conocimientos</h3>
-                <div class="quiz-question">
-                    <p>¿Qué herramienta permite extraer fotogramas clave de un video para verificar su autenticidad?</p>
-                    <div class="quiz-options">
-                        <div class="quiz-option" data-correct="false">Google Trends</div>
-                        <div class="quiz-option" data-correct="true">InVID-WeVerify</div>
-                        <div class="quiz-option" data-correct="false">DuckDuckGo</div>
-                        <div class="quiz-option" data-correct="false">Whois.com</div>
+        </section>
+
+        <section id="verificacion-dominios" class="mb-12 pt-16 -mt-16">
+            <h2 class="text-3xl font-semibold mb-6 section-title text-blue-700">
+                <i class="fas fa-globe mr-2"></i>Verificación de Dominios y Sitios Web
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="tool-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="card-content">
+                        <div class="flex items-center mb-3">
+                            <i class="fas fa-id-card text-3xl text-indigo-500 mr-3"></i>
+                            <h3 class="text-xl font-semibold text-gray-700">Whois.com</h3>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-3">Consulta información pública sobre el registro de un dominio web (propietario, fechas de registro/expiración, registrador).</p>
+                         <button class="toggle-details bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full mb-2">
+                            Aprender Más <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="details-content bg-gray-50 p-4 rounded-md border border-gray-200">
+                            <h4 class="font-semibold mb-2 text-gray-700">Cómo usar:</h4>
+                            <ul class="list-disc list-inside text-sm space-y-1 mb-3">
+                                <li>Ingresa el nombre de dominio (ej: <code class="bg-gray-200 px-1 rounded">ejemplo.com</code>) en <a href="https://www.whois.com/whois/" target="_blank" class="text-blue-500 hover:underline">Whois.com</a>.</li>
+                                <li>Analiza la información del registro:
+                                    <ul>
+                                        <li><strong>Fecha de registro (Creation Date):</strong> Un sitio web que publica noticias importantes pero fue registrado hace muy pocos días puede ser sospechoso.</li>
+                                        <li><strong>Información del registrante (Registrant Information):</strong> ¿Es pública o está protegida por privacidad? Si es pública, ¿los datos (nombre, organización) coinciden con la supuesta entidad detrás del sitio? A menudo, los sitios de desinformación usan servicios de privacidad.</li>
+                                        <li><strong>Fecha de expiración (Expiration Date):</strong> Dominios registrados por corto tiempo pueden ser una señal.</li>
+                                        <li><strong>Servidores de nombres (Name Servers):</strong> A veces pueden dar pistas sobre el proveedor de hosting.</li>
+                                    </ul>
+                                </li>
+                                <li>Ten en cuenta que la protección de privacidad es común y no implica necesariamente algo negativo, pero en conjunto con otras señales, puede ser relevante.</li>
+                            </ul>
+                            <p class="text-sm"><strong>Ejemplo práctico:</strong> Un nuevo sitio web publica una "noticia bomba" sin autor claro. Usar Whois para ver que el dominio fue registrado hace solo una semana, con información de contacto oculta, podría ser una señal de alerta importante sobre su credibilidad y motivaciones.</p>
+                        </div>
                     </div>
-                    <div class="quiz-feedback"></div>
-                    <button class="quiz-button">Comprobar respuesta</button>
+                    <a href="https://www.whois.com/whois/" target="_blank" class="mt-3 inline-block bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full text-center">
+                        Ir a Whois.com <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                    </a>
+                </div>
+
+                <div class="tool-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="card-content">
+                        <div class="flex items-center mb-3">
+                            <i class="fas fa-sitemap text-3xl text-cyan-500 mr-3"></i>
+                            <h3 class="text-xl font-semibold text-gray-700">Análisis del Sitio Web</h3>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-3">Revisa críticamente el contenido y la estructura de un sitio web para evaluar su fiabilidad y transparencia.</p>
+                        <button class="toggle-details bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full mb-2">
+                            Aprender Más <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="details-content bg-gray-50 p-4 rounded-md border border-gray-200">
+                            <h4 class="font-semibold mb-2 text-gray-700">Qué revisar (Principios de Análisis de Fuentes):</h4>
+                            <ul class="list-disc list-inside text-sm space-y-1 mb-3">
+                                <li><strong>"Acerca de" / "Quiénes somos" / "Nuestra Misión":</strong> ¿Proporciona información clara y detallada sobre la organización, su historia, su misión y su equipo directivo o editorial? ¿Hay nombres y credenciales verificables de los responsables? La ausencia o vaguedad es una señal de alerta.</li>
+                                <li><strong>Información de "Contacto":</strong> ¿Ofrece formas de contacto claras y directas (dirección física verificable, número de teléfono, correo electrónico institucional o profesional)? ¿O solo un formulario genérico o un email gratuito?</li>
+                                <li><strong>Políticas de Privacidad / Términos y Condiciones / Política Editorial:</strong> ¿Existen estas secciones? ¿Son detalladas y profesionales? ¿Describen cómo manejan los datos o sus estándares periodísticos?</li>
+                                <li><strong>Calidad del contenido y diseño:</strong> ¿Está bien escrito, sin errores gramaticales o de ortografía excesivos? ¿Los artículos citan fuentes confiables y verificables? ¿El diseño del sitio es profesional y cuidado, o parece descuidado y lleno de anuncios intrusivos?</li>
+                                <li><strong>Publicidad:</strong> ¿Hay una cantidad excesiva de anuncios, especialmente de baja calidad, engañosos o inapropiados (clickbait)? Esto puede indicar que el principal objetivo del sitio es generar ingresos por publicidad más que informar.</li>
+                                <li><strong>Autores de los artículos:</strong> ¿Los artículos tienen autores claramente identificables? ¿Se proporcionan biografías o enlaces a perfiles profesionales (Ej. LinkedIn, Twitter académico) que permitan verificar su experiencia y credenciales en el tema que escriben?</li>
+                                <li><strong>Nombre de Dominio y URL:</strong> ¿El nombre de dominio intenta imitar a un sitio conocido y reputado (ej: <code class="bg-gray-200 px-1 rounded">cnn-noticias.co</code> en lugar de <code class="bg-gray-200 px-1 rounded">cnn.com</code>)? ¿La URL es segura (HTTPS)?</li>
+                                <li><strong>Lectura Lateral:</strong> No te fíes solo de lo que el sitio dice de sí mismo. Abre nuevas pestañas y busca información sobre el nombre del sitio web, sus propietarios o autores principales en motores de búsqueda. Añade términos como "opiniones", "es fiable", "sesgo", "controversia" o "verificado por [nombre de fact-checker]". Comprueba si organizaciones de fact-checking o medios reconocidos lo han mencionado o analizado.</li>
+                            </ul>
+                            <p class="text-sm"><strong>Ejemplo práctico:</strong> Encuentras un artículo con afirmaciones sorprendentes en un sitio web que no conoces. Antes de compartirlo, revisa su sección "Acerca de". Si es inexistente, muy vaga, o no identifica responsables claros, desconfía. Realiza una "lectura lateral": busca en Google el nombre del sitio web. Si encuentras que ha sido señalado por verificadores como fuente de desinformación, o no encuentras ninguna referencia externa sobre su credibilidad, es mejor no confiar en su contenido.</p>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+        </section>
+
+        <section id="fact-checking" class="mb-12 pt-16 -mt-16">
+            <h2 class="text-3xl font-semibold mb-6 section-title text-blue-700">
+                <i class="fas fa-check-double mr-2"></i>Plataformas de Fact-Checking
+            </h2>
+            <p class="mb-6 text-gray-700">Organizaciones dedicadas a verificar sistemáticamente afirmaciones de figuras públicas, medios de comunicación y contenido viral que circula en línea. Consulta sus sitios antes de compartir información dudosa. Muchas son miembros de la <a href="https://www.poynter.org/ifcn/" target="_blank" class="text-blue-500 hover:underline">International Fact-Checking Network (IFCN)</a>, que establece un código de principios para garantizar la transparencia y la calidad metodológica.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="tool-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Maldita.es (España)</h3>
+                        <p class="text-sm text-gray-600 mb-3">Plataforma de periodismo sin ánimo de lucro que combate la desinformación y los bulos a través de múltiples secciones temáticas (bulos, ciencia, datos, tecnología, migración) y herramientas interactivas (WhatsApp, app, extensión de navegador). Fomenta la participación comunitaria.</p>
+                    </div>
+                    <a href="https://maldita.es/" target="_blank" class="mt-3 inline-block bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full text-center">
+                        Visitar Maldita.es <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                    </a>
+                </div>
+                <div class="tool-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Chequeado (Argentina)</h3>
+                        <p class="text-sm text-gray-600 mb-3">Organización pionera en fact-checking en América Latina, enfocada en verificar el discurso público argentino. Pone fuerte énfasis en la transparencia metodológica, la educación mediática y la innovación tecnológica (como su Chequeabot).</p>
+                    </div>
+                    <a href="https://chequeado.com/" target="_blank" class="mt-3 inline-block bg-sky-500 hover:bg-sky-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full text-center">
+                        Visitar Chequeado <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                    </a>
+                </div>
+                <div class="tool-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">AFP Factual (Global)</h3>
+                        <p class="text-sm text-gray-600 mb-3">División de verificación de la agencia de noticias Agence France-Presse (AFP). Opera globalmente en múltiples idiomas, desmintiendo desinformación que circula en línea. Colabora con plataformas tecnológicas para la moderación de contenidos.</p>
+                    </div>
+                    <a href="https://factual.afp.com/" target="_blank" class="mt-3 inline-block bg-blue-800 hover:bg-blue-900 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full text-center">
+                        Visitar AFP Factual <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                    </a>
+                </div>
+                <div class="tool-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Newtral (España)</h3>
+                        <p class="text-sm text-gray-600 mb-3">Startup mediática que combina periodismo, fact-checking y el uso de tecnología (IA) para la verificación del discurso político y bulos digitales. Ofrece servicios de verificación a través de WhatsApp.</p>
+                    </div>
+                    <a href="https://www.newtral.es/" target="_blank" class="mt-3 inline-block bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full text-center">
+                        Visitar Newtral <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                    </a>
+                </div>
+                <div class="tool-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">ColombiaCheck (Colombia)</h3>
+                        <p class="text-sm text-gray-600 mb-3">Iniciativa dedicada a la verificación de datos y el chequeo del discurso público en Colombia, contribuyendo a un debate más informado.</p>
+                    </div>
+                    <a href="https://colombiacheck.com/" target="_blank" class="mt-3 inline-block bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-4 rounded-lg text-sm w-full text-center">
+                        Visitar ColombiaCheck <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                    </a>
+                </div>
+                <div class="tool-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">El Sabueso (México)</h3>
+                        <p class="text-sm text-gray-600 mb-3">Unidad de fact-checking del medio digital Animal Político, enfocada en la verificación del discurso público y las promesas de actores políticos en México.</p>
+                    </div>
+                    <a href="https://www.animalpolitico.com/sabueso/" target="_blank" class="mt-3 inline-block bg-gray-700 hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full text-center">
+                        Visitar El Sabueso <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- Sección Verificación de dominios -->
-        <section id="domain-verify" class="section">
-            <h2>Verificación de Dominios y Sitios Web</h2>
-            <p>La confiabilidad de una fuente muchas veces puede determinarse por la información registrada del dominio y la transparencia del sitio web.</p>
-            <div class="tool-grid">
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <span>Whois.com</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="tool-content">
-                        <p>Consulta pública de datos de registro de dominios para conocer quién lo posee, cuándo fue creado y su historial.</p>
-                        <div class="steps-container">
-                            <div class="step">
-                                <div class="step-number">1</div>
-                                <div class="step-content">
-                                    <h4>Ingresa el dominio</h4>
-                                    <p>Visita whois.icann.org o usa servicios como whois.domaintools.com.</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">2</div>
-                                <div class="step-content">
-                                    <h4>Analiza los datos</h4>
-                                    <p>Verifica la fecha de creación, el propietario y el registro del dominio.</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">3</div>
-                                <div class="step-content">
-                                    <h4>Busca inconsistencias</h4>
-                                    <p>Dominios muy nuevos o con registros anónimos pueden ser señales de alerta.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tool-buttons">
-                            <a href="https://whois.icann.org/" target="_blank" class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i> Acceder a WHOIS
-                            </a>
+        <section id="casos-estudio" class="mb-12 pt-16 -mt-16">
+            <h2 class="text-3xl font-semibold mb-6 section-title text-blue-700">
+                <i class="fas fa-book-reader mr-2"></i>Galería de Casos de Estudio
+            </h2>
+            <p class="mb-8 text-gray-700">Explora ejemplos reales de desinformación y cómo fueron investigados y verificados utilizando las herramientas y técnicas aprendidas. Estos casos ilustran la aplicación práctica de la verificación de información.</p>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="case-study-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="card-content">
+                        <img src="https://placehold.co/600x400/E2E8F0/4A5568?text=Imagen+del+Caso+1" alt="Imagen del Caso de Estudio 1" class="w-full h-48 object-cover rounded-md mb-4">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Caso 1: Foto Antigua de Desastre Natural Usada Fuera de Contexto</h3>
+                        <p class="text-sm text-gray-600 mb-3">Una imagen impactante de una inundación circuló en redes sociales, afirmando ser de un evento reciente en la Ciudad X, causando alarma.</p>
+                        <button class="toggle-details bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full mb-2">
+                            Cómo se Verificó <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="details-content bg-gray-50 p-4 rounded-md border border-gray-200">
+                            <h4 class="font-semibold mb-2 text-gray-700">Proceso de Verificación:</h4>
+                            <ul class="list-disc list-inside text-sm space-y-1 mb-3">
+                                <li><strong>Herramienta Principal:</strong> Búsqueda Inversa de Imágenes (Google Images, TinEye).</li>
+                                <li>Se subió la imagen a Google Images. Los resultados mostraron que la fotografía correspondía a una inundación ocurrida hace 5 años en un país diferente.</li>
+                                <li>TinEye confirmó que la imagen apareció por primera vez en línea en artículos noticiosos de esa fecha y ubicación anterior.</li>
+                                <li><strong>Conclusión:</strong> La imagen era auténtica pero se estaba utilizando fuera de contexto para desinformar sobre un evento actual.</li>
+                            </ul>
+                            <p class="text-xs text-gray-500">Este es un ejemplo común de cómo imágenes reales pueden ser reutilizadas para crear narrativas falsas.</p>
                         </div>
                     </div>
+                    <a href="#" target="_blank" class="mt-4 inline-block bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full text-center">
+                        Ver Verificación Original (Ejemplo) <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                    </a>
                 </div>
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <span>Secciones clave de un sitio web</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="tool-content">
-                        <p>Las siguientes secciones ofrecen pistas sobre la credibilidad de un sitio web:</p>
-                        <div class="steps-container">
-                            <div class="step">
-                                <div class="step-number">1</div>
-                                <div class="step-content">
-                                    <h4>Acerca de / Quiénes somos</h4>
-                                    <p>Información clara sobre el equipo, misión y financiamiento.</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">2</div>
-                                <div class="step-content">
-                                    <h4>Contacto</h4>
-                                    <p>Correo electrónico, dirección física y números de contacto verificables.</p>
-                                </div>
-                            </div>
-                            <div class="step">
-                                <div class="step-number">3</div>
-                                <div class="step-content">
-                                    <h4>Políticas de privacidad</h4>
-                                    <p>Transparencia sobre cómo se recolectan y usan los datos de los usuarios.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tip-box">
-                            <h4><i class="fas fa-lightbulb"></i> Consejo</h4>
-                            <p>Si no encuentras información clara sobre el autor o editor de un artículo, sospecha de su credibilidad.</p>
+
+                <div class="case-study-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="card-content">
+                        <img src="https://placehold.co/600x400/D1FAE5/065F46?text=Imagen+del+Caso+2" alt="Imagen del Caso de Estudio 2" class="w-full h-48 object-cover rounded-md mb-4">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Caso 2: Video Manipulado de un Político Dando un Discurso</h3>
+                        <p class="text-sm text-gray-600 mb-3">Un video corto mostraba a un político diciendo frases controvertidas. El video se viralizó rápidamente, generando indignación.</p>
+                        <button class="toggle-details bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full mb-2">
+                            Cómo se Verificó <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="details-content bg-gray-50 p-4 rounded-md border border-gray-200">
+                            <h4 class="font-semibold mb-2 text-gray-700">Proceso de Verificación:</h4>
+                            <ul class="list-disc list-inside text-sm space-y-1 mb-3">
+                                <li><strong>Herramientas Usadas:</strong> InVID-WeVerify Plugin, búsqueda avanzada en YouTube/Google, análisis manual de fotogramas.</li>
+                                <li>Se utilizó InVID para extraer fotogramas clave y buscar el video original.</li>
+                                <li>Una búsqueda avanzada en YouTube con el nombre del político y la fecha aproximada del evento permitió encontrar el discurso completo y original.</li>
+                                <li>Al comparar el video viral con el original, se observó que el video viral había sido editado selectivamente (cortes y reordenamiento de frases) para cambiar el sentido de las declaraciones. Se notaron saltos abruptos en el audio y video.</li>
+                                <li><strong>Conclusión:</strong> El video viral era un "deepfake barato" o "cheapfake", una manipulación por edición, no por IA compleja, pero igualmente efectiva para desinformar.</li>
+                            </ul>
                         </div>
                     </div>
+                    <a href="#" target="_blank" class="mt-4 inline-block bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full text-center">
+                        Ver Verificación Original (Ejemplo) <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                    </a>
                 </div>
-            </div>
-            <div class="quiz-container">
-                <h3>Pon a prueba tus conocimientos</h3>
-                <div class="quiz-question">
-                    <p>¿Cuál es la principal ventaja de usar WHOIS para verificar un dominio?</p>
-                    <div class="quiz-options">
-                        <div class="quiz-option" data-correct="false">Permite eliminar sitios falsos automáticamente</div>
-                        <div class="quiz-option" data-correct="true">Muestra información sobre el dueño y la fecha de registro del dominio</div>
-                        <div class="quiz-option" data-correct="false">Traduce el contenido del sitio web</div>
-                        <div class="quiz-option" data-correct="false">Detecta si el sitio contiene virus</div>
+
+                <div class="case-study-card bg-white p-6 rounded-lg shadow-lg">
+                    <div class="card-content">
+                        <img src="https://placehold.co/600x400/FEF3C7/92400E?text=Imagen+del+Caso+3" alt="Imagen del Caso de Estudio 3" class="w-full h-48 object-cover rounded-md mb-4">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Caso 3: Sitio Web Falso Imitando un Medio Conocido</h3>
+                        <p class="text-sm text-gray-600 mb-3">Una noticia alarmante sobre salud pública se difundió desde un sitio web con un diseño y logo muy similar a un periódico de renombre.</p>
+                        <button class="toggle-details bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full mb-2">
+                            Cómo se Verificó <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="details-content bg-gray-50 p-4 rounded-md border border-gray-200">
+                            <h4 class="font-semibold mb-2 text-gray-700">Proceso de Verificación:</h4>
+                            <ul class="list-disc list-inside text-sm space-y-1 mb-3">
+                                <li><strong>Herramientas/Técnicas:</strong> Análisis de URL, Whois.com, revisión de secciones "Acerca de" y "Contacto", comparación con el sitio web auténtico.</li>
+                                <li>Se observó que la URL del sitio falso tenía una ligera variación respecto al original (ej. ".co" en lugar de ".com", o un guion extra).</li>
+                                <li>La consulta en Whois.com reveló que el dominio falso fue registrado recientemente y la información del propietario estaba oculta.</li>
+                                <li>La sección "Acerca de" del sitio falso era inexistente o copiada de otro lugar, y no había información de contacto válida.</li>
+                                <li>El medio de comunicación auténtico emitió un comunicado desmintiendo la noticia y advirtiendo sobre el sitio impostor.</li>
+                                <li><strong>Conclusión:</strong> El sitio web era una suplantación de identidad (phishing de noticias) creado para difundir desinformación y posiblemente obtener clics o datos.</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="quiz-feedback"></div>
-                    <button class="quiz-button">Comprobar respuesta</button>
+                    <a href="#" target="_blank" class="mt-4 inline-block bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg text-sm w-full text-center">
+                        Ver Verificación Original (Ejemplo) <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- Sección Plataformas de Fact-Checking -->
-        <section id="fact-checking" class="section">
-            <h2>Plataformas de Fact-Checking</h2>
-            <p>Existen organizaciones dedicadas a verificar afirmaciones públicas y combatir la desinformación. Estas plataformas son aliados clave para validar información rápida y fiablemente.</p>
-            <div class="tool-grid">
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <span>Maldita.es</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="tool-content">
-                        <p>Plataforma española dedicada a verificar bulos, noticias falsas y desinformación en medios y redes sociales.</p>
-                        <div class="tool-buttons">
-                            <a href="https://maldita.es/" target="_blank" class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i> Visitar Maldita.es
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <span>Chequeado</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="tool-content">
-                        <p>Red latinoamericana de fact-checking afiliada a la IFCN, enfocada en verificar afirmaciones políticas y sociales.</p>
-                        <div class="tool-buttons">
-                            <a href="https://chequeado.com/" target="_blank" class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i> Visitar Chequeado
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <span>Newtral</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="tool-content">
-                        <p>Plataforma española que verifica afirmaciones de figuras públicas y noticias virales.</p>
-                        <div class="tool-buttons">
-                            <a href="https://newtral.es/" target="_blank" class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i> Visitar Newtral
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <span>Animal Político - El Sabueso</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="tool-content">
-                        <p>Proyecto mexicano dedicado a verificar afirmaciones políticas y estadísticas.</p>
-                        <div class="tool-buttons">
-                            <a href="https://www.animalpolitico.com/el-sabueso/" target="_blank" class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i> Visitar El Sabueso
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <span>ColombiaCheck</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="tool-content">
-                        <p>Organización colombiana que combate la desinformación mediante investigaciones rigurosas.</p>
-                        <div class="tool-buttons">
-                            <a href="https://colombiacheck.co/" target="_blank" class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i> Visitar ColombiaCheck
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <span>IFCN - Miembros</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="tool-content">
-                        <p>La International Fact-Checking Network reúne organizaciones globales dedicadas a la verificación de información.</p>
-                        <div class="tool-buttons">
-                            <a href="https://ifcncodeofprinciples.poynter.org/members" target="_blank" class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i> Ver miembros de IFCN
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="quiz-container">
-                <h3>Pon a prueba tus conocimientos</h3>
-                <div class="quiz-question">
-                    <p>¿Cuál de las siguientes plataformas NO pertenece a la IFCN?</p>
-                    <div class="quiz-options">
-                        <div class="quiz-option" data-correct="false">Maldita.es</div>
-                        <div class="quiz-option" data-correct="false">Chequeado</div>
-                        <div class="quiz-option" data-correct="false">Newtral</div>
-                        <div class="quiz-option" data-correct="true">Animal Político (El Sabueso)</div>
-                    </div>
-                    <div class="quiz-feedback"></div>
-                    <button class="quiz-button">Comprobar respuesta</button>
-                </div>
+        <section id="materiales-apoyo" class="mb-12 pt-16 -mt-16">
+            <h2 class="text-3xl font-semibold mb-6 section-title text-blue-700">
+                <i class="fas fa-book-open mr-2"></i>Materiales de Apoyo
+            </h2>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <p class="mb-4">Aquí encontrarás recursos adicionales que complementan la información de esta aplicación y te ayudarán a profundizar en los temas de verificación y alfabetización mediática. Te recomendamos reemplazarlos o complementarlos con los materiales específicos de tu sesión virtual.</p>
+                <ul class="list-disc list-inside space-y-3">
+                    <li>
+                        <h4 class="font-semibold text-gray-700">Guías y Manuales:</h4>
+                        <ul class="list-disc list-inside ml-4 space-y-1">
+                            <li><a href="https://www.unesco.org/es/communication-information/media-information-literacy/resources/journalism-fake-news-disinformation" target="_blank" class="text-blue-500 hover:underline">Periodismo, Noticias Falsas y Desinformación: Manual para la Educación y Formación en Periodismo (UNESCO)</a></li>
+                            <li><a href="https://chequeado.com/el-abc-del-chequeo/" target="_blank" class="text-blue-500 hover:underline">El ABC del Chequeo (Chequeado)</a></li>
+                            <li><a href="https://www.firstdraftnews.org/wp-content/uploads/2019/10/Essential-Guide-to-Verifying-Online-Information-ES.pdf?x14895" target="_blank" class="text-blue-500 hover:underline">Guía Esencial para la Verificación de Información Online (First Draft News - PDF)</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h4 class="font-semibold text-gray-700 mt-3">Cursos y Formación:</h4>
+                        <ul class="list-disc list-inside ml-4 space-y-1">
+                            <li><a href="https://cursosenlinea.centroknight.org/course/como-combatir-la-desinformacion-digital/" target="_blank" class="text-blue-500 hover:underline">Curso: Cómo combatir la desinformación digital (Centro Knight para el Periodismo en las Américas)</a></li>
+                             <li><a href="https://digitalpublicsquare.org/dtc-course-es/" target="_blank" class="text-blue-500 hover:underline">Curso: Digital Trust Challenge - Desarrolla habilidades para identificar y combatir la desinformación (Digital Public Square)</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h4 class="font-semibold text-gray-700 mt-3">Recursos Adicionales:</h4>
+                        <ul class="list-disc list-inside ml-4 space-y-1">
+                            <li><a href="https://www.poynter.org/ifcn/checking-facts/teach-fact-checking/" target="_blank" class="text-blue-500 hover:underline">Recursos para Enseñar Fact-Checking (IFCN - Poynter Institute)</a></li>
+                            <li><a href="https://citizenevidence.org/" target="_blank" class="text-blue-500 hover:underline">Citizen Evidence Lab (Amnesty International)</a> - Herramientas y guías para verificar fotos y videos.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h4 class="font-semibold text-gray-700 mt-3">Materiales Específicos de la Sesión Virtual (Maestría):</h4>
+                        <ul class="list-disc list-inside ml-4 space-y-1">
+                             <li><a href="#" class="text-gray-500 italic">Presentación: [Nombre de tu presentación].pdf (Reemplazar con enlace real)</a></li>
+                             <li><a href="#" class="text-gray-500 italic">Grabación: [Nombre de tu sesión grabada] (Reemplazar con enlace real)</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </section>
 
-        <!-- Sección Materiales de Apoyo -->
-        <section id="resources" class="section">
-            <h2>Materiales de Apoyo</h2>
-            <p>Recursos adicionales para profundizar en el tema de verificación de información y educación mediática.</p>
-            <div class="tool-grid">
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <span>Guía de Alfabetización Mediática</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="tool-content">
-                        <p>Documento descargable con estrategias pedagógicas para enseñar alfabetización mediática en el aula.</p>
-                        <div class="tool-buttons">
-                            <a href="#" class="btn btn-primary">
-                                <i class="fas fa-download"></i> Descargar Guía
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <span>Videos explicativos</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="tool-content">
-                        <p>Videos cortos sobre técnicas de verificación, entrevistas a expertos y casos prácticos.</p>
-                        <div class="tool-buttons">
-                            <a href="#" class="btn btn-primary">
-                                <i class="fas fa-play-circle"></i> Ver videos
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="tool-card">
-                    <div class="tool-header">
-                        <span>Presentaciones previas</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="tool-content">
-                        <p>Acceso a las diapositivas utilizadas en sesiones virtuales sobre desinformación y verificación digital.</p>
-                        <div class="tool-buttons">
-                            <a href="#" class="btn btn-primary">
-                                <i class="fas fa-file-powerpoint"></i> Descargar presentaciones
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
 
-    <footer>
-        <div class="footer-content">
-            <p>&copy; 2025 VerifiCheck | Educación para los Medios</p>
-            <div class="footer-links">
-                <a href="#">Aviso Legal</a>
-                <a href="#">Política de Privacidad</a>
-                <a href="#">Contacto</a>
-            </div>
-        </div>
+    <footer class="bg-gray-800 text-white text-center p-6 mt-12">
+        <p>&copy; 2025 Maestría en Tecnologías Aplicadas a la Educación. Todos los derechos reservados.</p>
+        <p class="text-sm">Desarrollado como herramienta educativa para el módulo "Educación para los medios".</p>
     </footer>
 
-    <script src="script.js"></script>
+    <button id="backToTopBtn" title="Volver Arriba" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-full shadow-lg">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // JavaScript for interactive components
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('header a[href^="#"], #mobile-menu a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                    
+                    const headerOffset = document.querySelector('header').offsetHeight;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        
+                    window.scrollTo({
+                         top: offsetPosition,
+                         behavior: "smooth"
+                    });
+                }
+            });
+        });
+
+        // Toggle details in tool cards and case study cards
+        document.querySelectorAll('.toggle-details').forEach(button => {
+            button.addEventListener('click', function() {
+                const detailsContent = this.nextElementSibling; // Assumes details-content is the immediate next sibling
+                const icon = this.querySelector('i');
+                if (detailsContent && icon) {
+                    detailsContent.classList.toggle('open');
+                    if (detailsContent.classList.contains('open')) {
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                        this.setAttribute('aria-expanded', 'true');
+                    } else {
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                        this.setAttribute('aria-expanded', 'false');
+                    }
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+        
+        // Back to Top Button
+        const backToTopButton = document.getElementById('backToTopBtn');
+
+        window.onscroll = function() {
+            if (backToTopButton) {
+                if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                    backToTopButton.style.display = "block";
+                } else {
+                    backToTopButton.style.display = "none";
+                }
+            }
+        };
+
+        if (backToTopButton) {
+            backToTopButton.addEventListener('click', function() {
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            });
+        }
+    </script>
 </body>
 </html>
